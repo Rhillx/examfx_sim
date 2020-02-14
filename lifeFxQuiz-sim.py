@@ -84,11 +84,9 @@ class LifeFxSimulator:
         self.scroll_page()
         sleep(2)
         # SELECT QUIZ
-        menu = self.driver.find_element_by_xpath(
-            '//*[@id="aspnetForm"]/div[3]/header[2]/div/span[2]')
+        menu = self.driver.find_element_by_xpath('//*[@id="aspnetForm"]/div[3]/header[2]/div/span[2]')
         menu.click()
-        quiz = self.driver.find_element_by_xpath(
-            '//*[@id="ctl00_PageHeader_QuizButton"]')
+        quiz = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_QuizButton"]')
         quiz.click()
         sleep(3)
         x=1
@@ -125,10 +123,12 @@ class LifeFxSimulator:
         choices = [A, B, C, D]
         choice = random.choice(choices)
         sleep(2)
+
         question = self.driver.find_element_by_xpath('//*[@id="divQuestion"]').text
+
         with open('qna-life.json') as f:
             data = json.load(f)
-
+            sleep(5)
         
 
             if data.get(question) == None:
@@ -140,6 +140,7 @@ class LifeFxSimulator:
                 sleep(3)
                 # GET CORRECT ANSWER AND SET TO VARIABLE
                 correct_answer = self.driver.find_element_by_class_name('correct-choice').text.split('\n')[1]
+                print('Storing correct answer in database...')
                 # SET Q & A IN DATA DICT
                 data[question] = correct_answer
                 # DUMP DICT BACK INTO JSON FILE
@@ -148,26 +149,30 @@ class LifeFxSimulator:
                 # CLICK NEXT
                 correct_answer = ''
                 sleep(3)
-                print('Done. Retrieved correct answer.')
+                print('Done, Correct answer recorded.')
                 next_q = self.driver.find_element_by_xpath('//*[@id="ctl00_content_NextQuestionLink"]')
                 next_q.click()
                 
             else:
                 sleep(5)
                 print('Checking for answer....')
+                sleep(2)
                 correct_answer = data[question]
-                print(correct_answer)
+                print('Correct answer is:', correct_answer)
                 sleep(10)
                 # GET CORRECT ANSWER FROM DATA
                 # ITERATE THROUGH ANSWERS LIST FOR A MATCH
                 answer_el = self.driver.find_elements_by_class_name('answer-option')
                 # MUST BE SPLIT BY '\n' AND CHECK FOR EMPTIES
                 answers = [answer.text for answer in answer_el]
+                print('Searching through choices...')
+                sleep(1)
                 for answer in answers:
                     if answer != '':
                         if answer.split('\n')[1] == correct_answer:
                             c = {'A': 0, 'B': 1, 'C':2, 'D': 3}
                             ch = choices[c[answer.split('\n')[0]]]
+                            print('Selecting correct answer...')
                             ch.click()
                             sleep(3)
                 # SELECT THE CORRECT ANSWER BY A CLICK ACTION
@@ -182,13 +187,15 @@ class LifeFxSimulator:
         # CHOOSE TO REVIEW MATERIAL OR QUIZ
         menu2btn = self.driver.find_element_by_xpath('//*[@id="aspnetForm"]/header[2]/div/span')
         menu2btn.click()
-        # CHOOSE REVIEW QUIZ OPTION
+        # CHOOSE REVIEW TOPICS OPTION
         sleep(2)
         topics = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_StudyTopicsLink"]')
         topics.click()
         sleep(4)
+        # SCROLL SIMULATE
         self.scroll_page()
         sleep(6)
+        # INITIATE QUIZ
         menu = self.driver.find_element_by_xpath('//*[@id="aspnetForm"]/div[3]/header[2]/div/span[2]')
         menu.click()
         quiz = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_QuizButton"]')
@@ -203,18 +210,20 @@ class LifeFxSimulator:
             '//*[@id="aspnetForm"]/header[2]/div/span')
         menu2btn.click()
         # CHOOSE REVIEW QUIZ OPTION
-        sleep(2)
+        sleep(3)
         reviewQuizBtn = self.driver.find_element_by_xpath(
             '//*[@id="ctl00_PageHeader_ReviewLink"]')
         reviewQuizBtn.click()
-        sleep(5)
+        sleep(6)
         # CLOSE QUIZ WILL AUTOMATICALLY ADVANCE
         closeQuizBtn = self.driver.find_element_by_xpath(
             '//*[@id="ctl00_PageHeader_CloseReviewLink"]')
         closeQuizBtn.click()
         sleep(3)
+        # SIMULATE SCROLL
         self.scroll_page()
         sleep(7)
+        # INITIATE QUIZ
         menu = self.driver.find_element_by_xpath('//*[@id="aspnetForm"]/div[3]/header[2]/div/span[2]')
         menu.click()
         quiz = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_QuizButton"]')
@@ -224,15 +233,7 @@ class LifeFxSimulator:
 
     
     def scroll_page(self):
-
-        SCROLL_PAUSE_TIME = 1
-
         # Get scroll height
-        """last_height = driver.execute_script("return document.body.scrollHeight")
-
-        this dowsnt work due to floating web elements on youtube
-        """
-
         last_height = self.driver.execute_script("return document.documentElement.scrollHeight")
         while True:
             # Scroll down to bottom
