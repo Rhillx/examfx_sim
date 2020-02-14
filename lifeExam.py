@@ -61,13 +61,14 @@ class LifeExamSimulator:
 
         x=1
         while True:
-            if x < 83:
+            if x < 88:
                 sleep(1)
                 self.take_exam()
                 print('Progress:', x)
                 x += 1
             else:
-                print('Done!')
+                print('Ive Completed your exam sir.')
+                sleep(500)
 
         
         
@@ -93,38 +94,59 @@ class LifeExamSimulator:
         with open('qna-health.json') as f:
             data = json.load(f)
             sleep(5)
-            if data.get(exam_question) == None:
-                print('Question not found...')
+            
+        if data.get(exam_question) == None:
+            print('Question not found...')
 
-                # SELECT A RANDOM ANSWER
-                print('Seleceting random answer...')
-                sleep(1)
-                random_answer.click()
-                sleep(3)
-                print('Done selecting random.')
-                next_question_btn = self.driver.find_element_by_xpath('//*[@id="ctl00_content_btnNext"]')
-                next_question_btn.click()
-            else:
-                sleep(2)
-                print('Checking for answer....')
-                correct_answer = data[exam_question]
-                sleep(1)
-                print(correct_answer)
+            # SELECT A RANDOM ANSWER
+            print('Seleceting random answer...')
+            sleep(1)
+            random_answer.click()
+            sleep(3)
+            print('Done selecting random.')
+            next_question_btn = self.driver.find_element_by_xpath('//*[@id="ctl00_content_btnNext"]')
+            next_question_btn.click()
 
-                answers = [answer1_text, answer2_text, answer3_text, answer4_text]
+        else:
+            sleep(5)
+            print('Checking for answer....')
+            correct_answer = data[exam_question]
+            sleep(1)
+            if correct_answer.endswith('.'):
+                correct_answer = correct_answer[0:-1]
+            print(correct_answer)
+            sleep(10)
+            answers_t = [answer1_text, answer2_text, answer3_text, answer4_text]
 
-                # for answer in answers:
-                #     if answer[3:-1] == correct_answer:
-                #         a = {'1': answer1_input, '2': answer2_input, '3': answer3_input, '4': answer4_input}
-                #         sel_ans = a[answer[0]]
-                #         sel_ans.click()
-                #         sleep(3)
-                random_answer.click()
-                sleep(2)
-                print('Done.')
-                correct_answer = ''
-                next_question_btn = self.driver.find_element_by_xpath('//*[@id="ctl00_content_btnNext"]')
-                next_question_btn.click()
+            for answer in answers_t:
+                if answer[3:].endswith('.'):
+                    if answer[3:-1] == correct_answer:
+                        a = {'1': 0, '2': 1, '3': 2, '4': 3}
+                        print('Answer to match :', answer[3:-1])
+                        sleep(3)
+                        ans = answers[a[answer[0]]]
+
+                        print('Selecting right answer...')
+                        sleep(5)
+                        ans.click()
+                        sleep(10)
+                else:
+                    if answer[3:] == correct_answer:
+                        a = {'1': 0, '2': 1, '3': 2, '4': 3}
+                        print('Answer to match :', answer[3:])
+                        sleep(3)
+                        ans = answers[a[answer[0]]]
+
+                        print('Selecting right answer...')
+                        sleep(5)
+                        ans.click()
+                        sleep(10)
+            
+            
+            print('Done.')
+            correct_answer = ''
+            next_question_btn = self.driver.find_element_by_xpath('//*[@id="ctl00_content_btnNext"]')
+            next_question_btn.click()
 
 
 LifeExamSimulator()

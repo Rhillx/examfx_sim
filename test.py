@@ -1,15 +1,18 @@
 import random
 import json
 
-with open('qna.json') as f:
-    data = json.load(f)
 
 
-q = 'When an insured makes truthful statements on the application for insurance and pays the required premium, it is known as which of the following?'
-p = 'How are you?'
-x = data.get(p)
+answer1_input = 1
+answer2_input = 2
+answer3_input = 3
+answer4_input = 4
 
-if data.get(p) == None:
-    print(True)
-else:
-    print(False)
+answers = [answer1_input, answer2_input, answer3_input, answer4_input]
+
+
+a = {'1': 0, '2': 1, '3': 2, '4': 3}
+
+ans = answers[a['1']]
+
+print(ans)
