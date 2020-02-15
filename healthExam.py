@@ -49,8 +49,8 @@ class LifeExamSimulator:
         course_menu = self.driver.find_element_by_xpath('//*[@id="selectedCourse"]')
         course_menu.click()
         sleep(1)
-        life = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_ListView2_itemPlaceholderContainer"]/nav/ul/li[1]/a')
-        life.click()
+        health = self.driver.find_element_by_xpath('//*[@id="ctl00_PageHeader_ListView2_itemPlaceholderContainer"]/nav/ul/li[2]/a')
+        health.click()
         sleep(3)
         # CLOSE TOOLTIP
         tooltip = self.driver.find_element_by_xpath('//*[@id="walkme-balloon-1299718"]/div/div[1]/div[4]/div[2]/div/button/span')
@@ -64,7 +64,7 @@ class LifeExamSimulator:
 
         x=1
         while True:
-            if x < 84:
+            if x < 89:
                 sleep(1)
                 self.take_exam()
                 print('Progress:', x)
@@ -94,7 +94,7 @@ class LifeExamSimulator:
         sleep(2)
         exam_question = self.driver.find_element_by_xpath('//*[@id="divContent"]/table/tbody/tr[1]/td[2]').text
 
-        with open('qna-life.json') as f:
+        with open('qna-health.json') as f:
             data = json.load(f)
             sleep(5)
             
@@ -152,4 +152,4 @@ class LifeExamSimulator:
             next_question_btn.click()
 
 
-LifeExamSimulator()
+HealthExamSimulator()

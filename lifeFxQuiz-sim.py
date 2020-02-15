@@ -9,8 +9,9 @@ class LifeFxSimulator:
 
     def __init__(self):
 
-        # email = input('Email: ')
-        # password = input('Password: ')
+        email = 'jsantiago391@yahoo.com'
+
+        password = 'Chelx19sea91!'
 
         driver_path = r"C:\Users\rhill\Downloads\chromedriver_win32\chromedriver.exe"
         self.driver = webdriver.Chrome(driver_path)
@@ -19,10 +20,10 @@ class LifeFxSimulator:
         # ENTER EMAIL AND PASSWORD IN FIELDS AND LOGIN CLICK
         email_field = self.driver.find_element_by_xpath(
             "//*[@id='Content_txtEMail']")
-        email_field.send_keys(u)
+        email_field.send_keys(email)
         pw_field = self.driver.find_element_by_xpath(
             "//*[@id='Content_txtPassword']")
-        pw_field.send_keys(p)
+        pw_field.send_keys(password)
         loginBtn = self.driver.find_element_by_xpath(
             "//*[@id='Content_lbnLogin']")
         loginBtn.click()
@@ -34,11 +35,15 @@ class LifeFxSimulator:
         course.click()
         sleep(5)
 
+        verify_nxt_btn = self.driver.find_element_by_xpath('//*[@id="content_btnNext"]')
+        verify_nxt_btn.click()
+        sleep(2)
         # CLICK NEXT ON VERIFICATION PAGE
         nextbtn = self.driver.find_element_by_xpath(
             '//*[@id="content_btnNext"]')
         nextbtn.click()
         sleep(3)
+
 
         try:
             # CLOSE THE POP UP FOR TUTORIAL
@@ -250,3 +255,4 @@ class LifeFxSimulator:
             last_height = new_height
 
 LifeFxSimulator()
+
